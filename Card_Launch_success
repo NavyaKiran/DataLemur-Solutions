@@ -1,0 +1,6 @@
+select card_name, issued_amount 
+from 
+(select card_name, issued_amount, row_number() over(partition by card_name order by issue_year, issue_month) as row_number 
+from monthly_cards_issued) temp
+where row_number = 1 
+order by issued_amount desc;
