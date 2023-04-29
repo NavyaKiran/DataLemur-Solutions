@@ -1,0 +1,7 @@
+with cte as (select caller.country_id, receiver.country_id 
+from phone_calls join phone_info as caller on phone_calls.caller_id = caller.caller_id
+join phone_info as receiver on phone_calls.receiver_id = receiver.caller_id
+where caller.country_id <> receiver.country_id)
+
+select round(100.0 * count(*)/(select count(*) from phone_calls), 1) as international_call_pct 
+from cte;
