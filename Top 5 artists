@@ -1,0 +1,12 @@
+with cte as (select a.artist_id, a.artist_name, b.song_id, c.rank 
+from artists a INNER JOIN songs b on a.artist_id = b.artist_id 
+INNER JOIN global_song_rank c on b.song_id = c.song_id
+where rank <= 10)
+, cte2 as (select artist_name, dense_rank() over(order by count(song_id) desc) as rnk
+from cte
+group by artist_name)
+
+select artist_name, rnk as artist_rank
+from cte2
+where rnk <=5;
+
